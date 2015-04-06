@@ -8,22 +8,22 @@ class Card:
 
     def set_shading(self, decide):
         if ord(decide[1][0]) < 65:
-            self.shading = "symbol"
+            return "symbol"
         elif ord(decide[1][0]) < 97:
-            self.shading = "upper"
+            return "upper"
         else:
-            self.shading = "lower"
+            return "lower"
 
     def set_symbol(self, decide):
         a_sym = "aA@"
         s_sym = "sS$"
 
         if decide[1][0] in a_sym:
-            self.symbol = "a"
+            return "a"
         elif decide[1][0] in s_sym:
-            self.symbol = "s"
+            return "s"
         else:
-            self.symbol = "h"
+            return "h"
 
 
 class ThreeCard:
@@ -31,7 +31,7 @@ class ThreeCard:
         self.cards = [a, b, c]
 
     def is_valid_set(self):
-        if len(set(self.cards)) == len(self.cards):
+        if len(set(self.cards)) != len(self.cards):
             return False
         for prop in ['number', 'symbol', 'shading', 'color']:
             uniques = set(map((lambda c: getattr(c, prop)), self.cards))
@@ -45,7 +45,7 @@ deck = []
 def readCards():
     n = int(raw_input())
     for i in xrange(n):
-        data = raw_input().split(" ")
+        data = raw_input().strip().split(" ")
         card = Card(data)
         deck.append(card)
     return n
@@ -55,8 +55,8 @@ if __name__ == "__main__":
     allValidSets = []
 
     for i in xrange(n-2):
-        for j in xrange(1, n-1):
-            for k in xrange(2, n):
+        for j in xrange(i, n-1):
+            for k in xrange(j, n):
                 c3 = ThreeCard(deck[i], deck[j], deck[k])
                 if c3.is_valid_set():
                     allValidSets.append(c3)
