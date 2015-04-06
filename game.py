@@ -112,9 +112,9 @@ if __name__ == "__main__":
     print len(allValidSets)
 
     best_tree = SetTree(None)
-    for root in allValidSets:
+    for index, root in enumerate(allValidSets):
         tree = SetTree(root)
-        for candidate in allValidSets:
+        for candidate in allValidSets[(index+1):]:
             tree.insert(candidate)
         if tree.height() > best_tree.height():
             best_tree = tree
