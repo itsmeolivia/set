@@ -31,6 +31,7 @@ class Card:
     def __repr__(self):
         return str(self)
 
+
 class ThreeCard:
     def __init__(self, a, b, c):
         self.cards = [a, b, c]
@@ -52,6 +53,7 @@ class ThreeCard:
 
     def __repr__(self):
         return str(self)
+
 
 class SetTree:
     def __init__(self, value):
@@ -110,13 +112,16 @@ if __name__ == "__main__":
                 if c3.is_valid_set():
                     allValidSets.append(c3)
     print len(allValidSets)
+    if len(allValidSets) == 0:
+        print 0
+        exit(0)
 
-    best_tree = SetTree(None)
+    best_tree = None
     for index, root in enumerate(allValidSets):
         tree = SetTree(root)
         for candidate in allValidSets[(index+1):]:
             tree.insert(candidate)
-        if tree.height() > best_tree.height():
+        if (best_tree is None) or tree.height() > best_tree.height():
             best_tree = tree
 
     print best_tree.height()
