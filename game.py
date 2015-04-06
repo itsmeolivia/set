@@ -93,7 +93,7 @@ class SetTree:
 deck = []
 
 
-def readCards():
+def read_cards():
     n = int(raw_input())
     for i in xrange(n):
         data = raw_input().strip().split(" ")
@@ -102,24 +102,24 @@ def readCards():
     return n
 
 if __name__ == "__main__":
-    n = readCards()
-    allValidSets = []
+    n = read_cards()
+    all_valid_sets = []
 
     for i in xrange(n-2):
         for j in xrange(i, n-1):
             for k in xrange(j, n):
                 c3 = ThreeCard(deck[i], deck[j], deck[k])
                 if c3.is_valid_set():
-                    allValidSets.append(c3)
-    print len(allValidSets)
-    if len(allValidSets) == 0:
+                    all_valid_sets.append(c3)
+    print len(all_valid_sets)
+    if len(all_valid_sets) == 0:
         print 0
         exit(0)
 
     best_tree = None
-    for index, root in enumerate(allValidSets):
+    for index, root in enumerate(all_valid_sets):
         tree = SetTree(root)
-        for candidate in allValidSets[(index+1):]:
+        for candidate in all_valid_sets[(index+1):]:
             tree.insert(candidate)
         if (best_tree is None) or tree.height() > best_tree.height():
             best_tree = tree
