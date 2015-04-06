@@ -1,8 +1,8 @@
 class Card:
     def __init__(self, decide):
         self.color = decide[0]
-        self.symbol = set_symbol(decide)
-        self.shading = set_shading(decide)
+        self.symbol = self.set_symbol(decide)
+        self.shading = self.set_shading(decide)
         self.number = len(decide[1])
         self.output = decide
 
@@ -31,13 +31,16 @@ class ThreeCard:
         self.cards = [a, b, c]
 
     def is_valid_set(self):
-        for prop in ['number', 'symbol', 'shade', 'color']:
+        if len(set(self.cards)) == len(self.cards):
+            return False
+        for prop in ['number', 'symbol', 'shading', 'color']:
             uniques = set(map((lambda c: getattr(c, prop)), self.cards))
             if len(uniques) == 2:
                 return False
         return True
 
 deck = []
+
 
 def readCards():
     n = int(raw_input())
@@ -58,7 +61,3 @@ if __name__ == "__main__":
                 if c3.is_valid_set():
                     allValidSets.append(c3)
     print len(allValidSets)
-
-
-    print count_total
-    print disjoint_total
