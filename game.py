@@ -1,14 +1,12 @@
-
-
 class Card:
     def __init__(self, decide):
         self.color = decide[0]
-        self.symbol = set_symbol()
-        self.shading = set_shading()
+        self.symbol = set_symbol(decide)
+        self.shading = set_shading(decide)
         self.number = len(decide[1])
         self.output = decide
 
-    def set_shading():
+    def set_shading(self, decide):
         if ord(decide[1][0]) < 65:
             self.shading = "symbol"
         elif ord(decide[1][0]) < 97:
@@ -16,7 +14,7 @@ class Card:
         else:
             self.shading = "lower"
 
-    def set_symbol():
+    def set_symbol(self, decide):
         a_sym = "aA@"
         s_sym = "sS$"
 
@@ -26,6 +24,18 @@ class Card:
             self.symbol = "s"
         else:
             self.symbol = "h"
+
+
+class ThreeCard:
+    def __init__(self, a, b, c):
+        self.cards = [a, b, c]
+
+    def is_valid_set(self):
+        for prop in ['number', 'symbol', 'shade', 'color']:
+            uniques = set(map((lambda c: getattr(c, prop)), self.cards))
+            if len(uniques) == 2:
+                return False
+        return True
 
 deck = []
 
@@ -37,23 +47,18 @@ def readCards():
         deck.append(card)
     return n
 
-def is_valid_set(cards):
-    for prop in ['number', 'symbol', 'shade', 'color']:
-        uniques = set(map((lambda c: getattr(c, prop)), cards))
-        if len(uniques) == 2:
-            return False
-    return True
-
 if __name__ == "__main__":
     n = readCards()
-    count_total = 0
-    disjoint_total = 0
+    allValidSets = []
 
     for i in xrange(n-2):
         for j in xrange(1, n-1):
             for k in xrange(2, n):
-                if is_valid_set(deck[i], deck[j], deck[k]):
-                    count_total += 1
+                c3 = ThreeCard(deck[i], deck[j], deck[k])
+                if c3.is_valid_set():
+                    allValidSets.append(c3)
+    print len(allValidSets)
+
 
     print count_total
     print disjoint_total
