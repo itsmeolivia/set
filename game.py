@@ -25,6 +25,11 @@ class Card:
         else:
             return "h"
 
+    def __str__(self):
+        return ' '.join(self.output)
+
+    def __repr__(self):
+        return str(self)
 
 class ThreeCard:
     def __init__(self, a, b, c):
@@ -38,6 +43,50 @@ class ThreeCard:
             if len(uniques) == 2:
                 return False
         return True
+
+    def conflicts_with(self, other):
+        return len(set(self.cards) & set(other.cards)) != 0
+
+    def __str__(self):
+        return str(self.cards)
+
+    def __repr__(self):
+        return str(self)
+
+class SetTree:
+    def __init__(self, value):
+        self.value = value
+        self.children = []
+
+    def insert(self, candidate):
+        if self.value.conflicts_with(candidate):
+            return
+
+        already_has_candidate = False
+        for child in self.children:
+            child.insert(candidate)
+            if child.value == candidate:
+                already_has_candidate = True
+
+        if not already_has_candidate:
+            self.children.append(SetTree(candidate))
+
+    def height(self):
+        return len(self.longest_path())
+
+    def longest_path(self):
+        result = [self.value]
+        for child in self.children:
+            subpath = child.longest_path()
+            if len(subpath) >= len(result):
+                result = [self.value] + subpath
+        return result
+
+    def __str__(self):
+        return '<' + str(self.value) + ' ' + str(self.children) + '>'
+
+    def __repr__(self):
+        return str(self)
 
 deck = []
 
@@ -61,3 +110,19 @@ if __name__ == "__main__":
                 if c3.is_valid_set():
                     allValidSets.append(c3)
     print len(allValidSets)
+
+    best_tree = SetTree(None)
+    for root in allValidSets:
+        tree = SetTree(root)
+        for candidate in allValidSets:
+            tree.insert(candidate)
+        if tree.height() > best_tree.height():
+            best_tree = tree
+
+    print best_tree.height()
+
+    longest_path = best_tree.longest_path()
+    for three_set in longest_path:
+        print
+        for card in three_set.cards:
+            print card
